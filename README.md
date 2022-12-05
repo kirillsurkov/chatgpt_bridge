@@ -14,3 +14,6 @@ After that you'll be able to open page `http://127.0.0.1/docs` and play with API
 
 
 You can see example usage of this API in the `tg_bot` directory.
+
+
+This project was made just for fun, so the code may not be perfect. Any suggestions are welcome!
