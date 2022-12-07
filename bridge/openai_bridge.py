@@ -20,8 +20,26 @@ def create_api(conversation: Conversation, driver: WebDriver):
         try:
             return conversation.ask(question.question)
         except:
-            print("Exception in API")
+            print("Exception in /ask")
             traceback.print_exc()
+        return ""
+
+    @fast_api.post("/refresh_thread")
+    def refresh_thread():
+        try:
+            conversation.refresh_thread()
+        except:
+            print("Exception in /refresh_thread")
+            traceback.print_exc()
+    
+    @fast_api.get("/is_thread_new")
+    def is_thread_new():
+        try:
+            return conversation.is_thread_new()
+        except:
+            print("Exception in /is_thread_new")
+            traceback.print_exc()
+        return False
 
 try:
     auth = AuthOpenAI(os.environ.get("OPENAI_EMAIL"), os.environ.get("OPENAI_PASSWORD"))

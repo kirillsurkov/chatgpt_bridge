@@ -17,10 +17,12 @@ class Conversation:
         self.send = parent.find_element(By.TAG_NAME, "button")
         self.refresh = driver.find_element(By.CSS_SELECTOR, "nav a")
         self.driver = driver
+        self.thread_new = True
 
     def ask(self, question: str):
         self.driver.execute_script("arguments[0].value = arguments[1]", self.prompt, question)
         self.driver.execute_script("arguments[0].click()", self.send)
+        self.thread_new = False
         wait = WebDriverWait(self.driver, Data.SELENIUM_CONVERSATION_TIMEOUT)
         cond = expected_conditions.element_to_be_clickable((By.CLASS_NAME, "result-streaming"))
         answer = wait.until(cond)
@@ -29,6 +31,13 @@ class Conversation:
                 break
             time.sleep(0.1)
         if "text-red-500" in answer.get_attribute("class").split():
-            self.refresh.click()
+            self.refresh_thread()
             raise ValueError("Remote error")
         return answer.get_attribute("innerText")
+    
+    def refresh_thread(self):
+        self.driver.execute_script("arguments[0].click()", self.refresh)
+        self.thread_new = True
+    
+    def is_thread_new(self):
+        return self.thread_new
